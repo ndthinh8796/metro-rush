@@ -1,28 +1,21 @@
 from graph import Graph
+from collections import deque
 
-class Algo(Graph):
-    def find_shortest_path(self, graph, start, end, path=[]):
-        # path = path + [start]
-        # print(path)
-        # if start == end:
-        #     return path
-        # if not start in graph:
-        #     return None
-        # shortest = None
-        # for node in graph[start]:
-        #     if node not in path:
-        #         newpath = self.find_shortest_path(graph, node, end, path)
-        #         if newpath:
-        #             if not shortest or len(newpath) < len(shortest):
-        #                 shortest = newpath
-        # return shortest
-        path = path + [start]
-        if start == end:
-            return path
-        if not start in graph:
-            return None
-        for node in graph[start]:
-            if node not in path:
-                newpath = self.find_shortest_path(graph, node, end, path)
-                if newpath: return newpath
+class BFS(Graph):
+    def find_shortest_path(self):
+        if self.start == self.end:
+            return [self.start]
+        visited = {self.start}
+        queue = deque([(self.start, [])])
+
+        while queue:
+            current, path = queue.popleft()
+            visited.add(current)
+            for neighbor in self.map[current]:
+                if neighbor == self.end:
+                    return path + [current, neighbor]
+                if neighbor in visited:
+                    continue
+                queue.append((neighbor, path + [current]))
+                visited.add(neighbor)
         return None
