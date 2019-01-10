@@ -1,6 +1,7 @@
 class Train:
-    def __init__(self, id):
+    def __init__(self, id, station_obj):
         self.id = id
+        self.station_obj = station_obj
         self.position = 0
 
     def __str__(self):
