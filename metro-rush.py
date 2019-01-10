@@ -10,6 +10,8 @@ class MetroRush:
         self.file = file
         self.lines = self.__read_file()
 
+# ---------------------------------------------------------------------
+
     def __read_file(self):
         '''
             return all lines in file
@@ -17,6 +19,8 @@ class MetroRush:
 
         with open(self.file) as f:
             return [line.rstrip() for line in f]
+
+# ---------------------------------------------------------------------
 
     def __create_station(self, line, string):
         '''
@@ -31,6 +35,8 @@ class MetroRush:
         else:
             id, station = station_elements
             return Station(id, line, station)
+
+# ---------------------------------------------------------------------
 
     def __add_moves(self, stations, index, map):
         '''
@@ -58,6 +64,8 @@ class MetroRush:
                     break
         return map
 
+# ---------------------------------------------------------------------
+
     def __create_map(self):
         '''
             create stations object and return a list
@@ -70,12 +78,52 @@ class MetroRush:
                 stations.append(self.__create_station(key, self.lines[i]))
         return stations
 
+# ---------------------------------------------------------------------
+
+    def __check_file(self):
+        '''
+            validate file
+        '''
+        from os import access, R_OK
+        from os.path import isfile
+
+        # check passed argument is file or able to read
+        if not isfile(self.file) or not access(self.file, R_OK):
+            stderr.write('Unable to read file!\n')
+            exit(1)
+
+        # check for 3 conditions
+        if ('START' not in self.lines[-3] and
+            'END' not in self.lines[-2] and
+            'TRAINS' not in self.lines[-1]):
+            stderr.write('Missing conditions!\n')
+            exit(1)
+
+        # check content
+        for i in range(len(self.lines) - 4):
+            line = self.lines[i].split(':')
+            try:
+                int(line[0])
+            except ValueError:
+                break
+            if ((len(line) == 1 and not line.startswith('#'))
+                or (not line.startswith('#') and i == 0)):
+                break
+            elif len(line) not in [2, 4]:
+                break
+        else:
+            stderr.write('Wrong content!\n')
+            exit(1)
+
+# ---------------------------------------------------------------------
+
     def all_possible_moves(self):
         '''
             find all possible moves for each station
             and return a dictionary with key is station
             and value is a list of possible moves
         '''
+        self.__check_file()
         moves = defaultdict(list)
         list_stations = self.__create_map()
         count = 0
@@ -84,6 +132,8 @@ class MetroRush:
             moves = self.__add_moves(list_stations, count, moves)
             count += 1
         return moves
+
+# ---------------------------------------------------------------------
 
     def get_conditions(self, map):
         '''
