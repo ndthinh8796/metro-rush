@@ -22,8 +22,7 @@ class BFS(Graph):
 
                 # return if one of the neighbor is end point
                 if neighbor == self.end:
-                    self.path = path + [current, neighbor]
-                    return self.path
+                    return path + [current, neighbor]
 
                 # continue if neighbor already visited
                 if neighbor in visited:

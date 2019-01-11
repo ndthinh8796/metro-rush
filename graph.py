@@ -8,34 +8,40 @@ class Graph(ABC):
         self.map = map
         self.start = start
         self.end = end
-        self.shortest_path = []
+        self.path = []
 
-
-    @staticmethod
-    def run_train(n_trains, path):
-        trains = deque([Train(i, path[0]) for i in range(1, n_trains + 1)])
-        path[0].trains = trains.copy()
+    def run_train(self, n_trains):
+        # get a list of trains objects
+        trains = deque([Train(i, self.start)for i in range(1, n_trains + 1)])
+        self.start.trains = trains.copy()
         turn = 1
 
-        while len(path[-1].trains) < n_trains:
+        while len(self.end.trains) < n_trains:
             print('\nTurn: {}'.format(turn))
             print('------------------------------------')
-
+            
+            # loop through all trains
             for i in range(n_trains):
-                if i > 0 and trains[i].position < len(path) - 2:
-                    forward_train = trains[i - 1].station_obj
-                    next_station = path[trains[i].position + 1].station_name
-                    if forward_train.station_name == next_station:
+            
+                # if index > 0 and current train position < end - 1
+                if i > 0 and trains[i].position < len(self.path) - 2:
+                    forward_train, next_station = (trains[i - 1].station_obj,
+                                                   self.path[trains[i].position + 1])
+                                                   
+                    # break if the train ahead is in 
+                    # a station with the same station name
+                    # as the station ahead of current train
+                    if forward_train.station_name == next_station.station_name:
                         break
-                if trains[i].position < len(path) - 1:
-                    path[trains[i].position].trains.remove(trains[i])
+                
+                # move train if train position < end
+                if trains[i].position < len(self.path) - 1:
+                    self.path[trains[i].position].trains.remove(trains[i])
                     trains[i].position += 1
-                    trains[i].station_obj = path[trains[i].position]
-                    path[trains[i].position].trains.append(trains[i])
+                    trains[i].station_obj = self.path[trains[i].position]
+                    self.path[trains[i].position].trains.append(trains[i])
 
-
-
-            for x in path:
+            for x in self.path:
                 if x.trains:
                     print('{} - {}'.format(str(x), ', '.join([str(y) for y in x.trains])))
             turn += 1

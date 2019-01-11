@@ -32,8 +32,9 @@ class MetroRush:
         if len(station_elements) > 2:
             id, station, _, conn = station_elements
             return Station(id, line, station, conn.strip())
-        id, station = station_elements
-        return Station(id, line, station)
+        else:
+            id, station = station_elements
+            return Station(id, line, station)
 
 # ---------------------------------------------------------------------
 
@@ -159,7 +160,7 @@ def main():
     start, end, trains = metrorush1.get_conditions(all_moves)
     bfs = BFS(all_moves, start, end)
     path = bfs.find_shortest_path()
-    bfs.run_train(trains)
+    bfs.run_train(trains, path)
 
 if __name__ == '__main__':
     main()
