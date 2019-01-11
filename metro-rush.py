@@ -13,9 +13,9 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def __read_file(self):
-        '''
+        """
             return all lines in file
-        '''
+        """
 
         with open(self.file) as f:
             return [line.rstrip() for line in f]
@@ -23,10 +23,10 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def __create_station(self, line, string):
-        '''
+        """
             check if station have connect point
             then return a station object
-        '''
+        """
 
         station_elements = string.split(':')
         if len(station_elements) > 2:
@@ -38,9 +38,9 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def __add_moves(self, stations, index, map):
-        '''
+        """
             append possible moves of current station
-        '''
+        """
 
         current = stations[index]
 
@@ -66,9 +66,9 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def __create_map(self):
-        '''
+        """
             create stations object and return a list
-        '''
+        """
         stations = []
         for i in range(len(self.lines) - 4):
             if self.lines[i].startswith('#'):
@@ -80,9 +80,9 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def __check_file(self):
-        '''
+        """
             validate file
-        '''
+        """
         from os import access, R_OK
         from os.path import isfile
 
@@ -117,11 +117,11 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def all_possible_moves(self):
-        '''
+        """
             find all possible moves for each station
             and return a dictionary with key is station
             and value is a list of possible moves
-        '''
+        """
         self.__check_file()
         moves = defaultdict(list)
         list_stations = self.__create_map()
@@ -135,9 +135,9 @@ class MetroRush:
 # ---------------------------------------------------------------------
 
     def get_conditions(self, map):
-        '''
+        """
             return start point, end point and number of trains
-        '''
+        """
 
         start = tuple(self.lines[-3].split('=')[1].split(':'))
         end = tuple(self.lines[-2].split('=')[1].split(':'))
